@@ -1,0 +1,17 @@
+
+
+package main;
+
+public class PrescriptionMedicine extends Medicine {
+    private String doctorName;
+
+    public PrescriptionMedicine(String name, double price, MedicineCategory category, String doctorName) {
+        super(name, price, category);
+        this.doctorName = doctorName;
+    }
+
+    @Override
+    public String toString() {
+        return super.toString() + " | Doctor: " + doctorName;
+    }
+}
