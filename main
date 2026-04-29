@@ -1,1 +1,53 @@
 
+package main;
+import java.util.Scanner;
+import java.util.InputMismatchException;
+
+public class MainApp {
+    public static void main(String[] args) {
+        Scanner sc = new Scanner(System.in);
+        PharmacyManager manager = new PharmacyManager(100);
+        
+        System.out.println("=== Login ===");
+        System.out.print("User: "); String user = sc.next();
+        System.out.print("Pass: "); String pass = sc.next();
+
+        if (!user.equals("admin") || !pass.equals("123")) return;
+
+        int choice = 0;
+        do {
+            try {
+                System.out.println("\n1. Add Medicine\n2. Add Prescription\n3. Search\n4. Update\n5. Exit");
+                choice = sc.nextInt();
+
+                switch (choice) {
+                    case 1:
+                        System.out.print("Name: "); String n = sc.next();
+                        System.out.print("Price: "); double p = sc.nextDouble();
+                        manager.addMedicine(new Medicine(n, p, MedicineCategory.GENERAL));
+                        break;
+                    case 2:
+                        System.out.print("Name: "); String pn = sc.next();
+                        System.out.print("Price: "); double pp = sc.nextDouble();
+                        System.out.print("Doctor: "); String d = sc.next();
+                        manager.addMedicine(new PrescriptionMedicine(pn, pp, MedicineCategory.ANTIBIOTIC, d));
+                        break;
+                    case 3:
+                        manager.searchByName(sc.next());
+                        break;
+                    case 4:
+                        System.out.print("Name: "); String un = sc.next();
+                        System.out.print("New Price: "); double up = sc.nextDouble();
+                        manager.updatePrice(un, up);
+                        break;
+                    case 5:
+                        manager.saveData();
+                        break;
+                }
+            } catch (InputMismatchException e) {
+                System.out.println("خطأ: يرجى إدخال أرقام فقط!");
+                sc.next(); // لتنظيف الـ Scanner
+            }
+        } while (choice != 5);
+    }
+}
