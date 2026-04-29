@@ -1,0 +1,49 @@
+
+
+package main;
+import java.io.*;
+
+public class PharmacyManager {
+    private Medicine[] inventory;
+    private int count;
+
+    public PharmacyManager(int size) {
+        inventory = new Medicine[size];
+        count = 0;
+    }
+
+    public void addMedicine(Medicine m) {
+        if (count < inventory.length) {
+            inventory[count++] = m;
+        }
+    }
+
+    public void searchByName(String name) {
+        for (int i = 0; i < count; i++) {
+            if (inventory[i].getName().equalsIgnoreCase(name)) {
+                System.out.println(inventory[i]);
+                return;
+            }
+        }
+        System.out.println("غير موجود.");
+    }
+
+    public void updatePrice(String name, double newPrice) {
+        for (int i = 0; i < count; i++) {
+            if (inventory[i].getName().equalsIgnoreCase(name)) {
+                inventory[i].setPrice(newPrice);
+                return;
+            }
+        }
+    }
+
+    public void saveData() {
+        try (PrintWriter out = new PrintWriter(new FileWriter("data.txt"))) {
+            for (int i = 0; i < count; i++) {
+                out.println(inventory[i]);
+            }
+        } catch (IOException e) {
+            System.out.println("خطأ في الحفظ.");
+        }
+    }
+}
