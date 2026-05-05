@@ -1,17 +1,27 @@
 
-
 package main;
 
+/**
+ * فئة الأدوية الموصوفة: ترث من الفئة الأساسية Medicine
+ * تُستخدم لتمييز الأدوية التي لا تُصرف إلا بإذن طبيب
+ */
 public class PrescriptionMedicine extends Medicine {
-    private String doctorName;
+    private String doctorName; // اسم الطبيب الذي وصف الدواء
 
+    // المشيد: يقوم باستدعاء مشيد الفئة الأم (super) لتخزين البيانات الأساسية
     public PrescriptionMedicine(String name, double price, MedicineCategory category, String doctorName) {
-        super(name, price, category);
+        // نرسل الاسم والسعر والفئة للكلاس الأساسي (Medicine)
+        super(name, price, category); 
         this.doctorName = doctorName;
     }
 
+    /**
+     * إعادة كتابة دالة toString (Override)
+     * تقوم بجلب بيانات الدواء الأساسية من الفئة الأم وتضيف إليها اسم الطبيب
+     */
     @Override
     public String toString() {
+        // استخدام super.toString() يمنع تكرار الكود ويجلب (الاسم، السعر، الفئة)
         return super.toString() + " | Doctor: " + doctorName;
     }
 }
