@@ -1,52 +1,64 @@
-
 package main;
 import java.util.Scanner;
 import java.util.InputMismatchException;
 
+/**
+ * الفئة التشغيلية MainApp: هي الواجهة التي يتفاعل معها المستخدم (Console Interface)
+ */
 public class MainApp {
     public static void main(String[] args) {
         Scanner sc = new Scanner(System.in);
+        // إنشاء كائن المدير بحجم مخزن يتسع لـ 100 صنف
         PharmacyManager manager = new PharmacyManager(100);
         
+        // نظام تسجيل دخول بسيط (Authentication)
         System.out.println("=== Login ===");
         System.out.print("User: "); String user = sc.next();
         System.out.print("Pass: "); String pass = sc.next();
 
-        if (!user.equals("admin") || !pass.equals("123")) return;
+        // التحقق من صحة البيانات (الخروج من البرنامج إذا كانت خاطئة)
+        if (!user.equals("admin") || !pass.equals("123")) {
+            System.out.println("بيانات الدخول خاطئة!");
+            return;
+        }
 
         int choice = 0;
+        // حلقة تكرارية لعرض القائمة حتى يختار المستخدم الخروج (رقم 5)
         do {
             try {
                 System.out.println("\n1. Add Medicine\n2. Add Prescription\n3. Search\n4. Update\n5. Exit");
                 choice = sc.nextInt();
 
                 switch (choice) {
-                    case 1:
+                    case 1: // إضافة دواء عادي
                         System.out.print("Name: "); String n = sc.next();
                         System.out.print("Price: "); double p = sc.nextDouble();
                         manager.addMedicine(new Medicine(n, p, MedicineCategory.GENERAL));
                         break;
-                    case 2:
+                    case 2: // إضافة دواء بوصفة طبية (لاحظ استخدام الكلاس المورث هنا)
                         System.out.print("Name: "); String pn = sc.next();
                         System.out.print("Price: "); double pp = sc.nextDouble();
                         System.out.print("Doctor: "); String d = sc.next();
                         manager.addMedicine(new PrescriptionMedicine(pn, pp, MedicineCategory.ANTIBIOTIC, d));
                         break;
-                    case 3:
+                    case 3: // البحث عن دواء
+                        System.out.print("Enter name to search: ");
                         manager.searchByName(sc.next());
                         break;
-                    case 4:
+                    case 4: // تحديث السعر
                         System.out.print("Name: "); String un = sc.next();
                         System.out.print("New Price: "); double up = sc.nextDouble();
                         manager.updatePrice(un, up);
                         break;
-                    case 5:
+                    case 5: // الحفظ والخروج
                         manager.saveData();
+                        System.out.println("تم حفظ البيانات والخروج.");
                         break;
                 }
             } catch (InputMismatchException e) {
+                // معالجة خطأ إدخال نص بدلاً من رقم لتجنب توقف البرنامج (Crash)
                 System.out.println("خطأ: يرجى إدخال أرقام فقط!");
-                sc.next(); // لتنظيف الـ Scanner
+                sc.next(); // "تنظيف" الماسح الضوئي من المدخل الخاطئ
             }
         } while (choice != 5);
     }
