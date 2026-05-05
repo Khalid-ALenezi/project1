@@ -1,49 +1,61 @@
 
-
-package main;
+=package main;
 import java.io.*;
 
+/**
+ * فئة إدارة الصيدلية: مسؤولة عن إدارة مخزون الأدوية (إضافة، بحث، تحديث، وحفظ)
+ */
 public class PharmacyManager {
-    private Medicine[] inventory;
-    private int count;
+    private Medicine[] inventory; // مصفوفة لتخزين كائنات الأدوية
+    private int count;            // عداد لتتبع عدد الأدوية المضافة فعلياً
 
+    // مشيد الفئة: يحدد حجم المخزون عند إنشاء الكائن
     public PharmacyManager(int size) {
         inventory = new Medicine[size];
         count = 0;
     }
 
+    // إضافة دواء جديد للمخزون إذا كانت هناك مساحة متوفرة
     public void addMedicine(Medicine m) {
         if (count < inventory.length) {
             inventory[count++] = m;
+        } else {
+            System.out.println("المخزون ممتلئ!");
         }
     }
 
+    // البحث عن دواء بالاسم (يتجاهل حالة الأحرف كبير/صغير)
     public void searchByName(String name) {
         for (int i = 0; i < count; i++) {
             if (inventory[i].getName().equalsIgnoreCase(name)) {
-                System.out.println(inventory[i]);
-                return;
+                System.out.println(inventory[i]); // يطبع بيانات الدواء إذا وجده
+                return; // يخرج من الدالة بعد العثور على النتائج
             }
         }
         System.out.println("غير موجود.");
     }
 
+    // تحديث سعر دواء معين بناءً على اسمه
     public void updatePrice(String name, double newPrice) {
         for (int i = 0; i < count; i++) {
             if (inventory[i].getName().equalsIgnoreCase(name)) {
                 inventory[i].setPrice(newPrice);
+                System.out.println("تم تحديث السعر بنجاح.");
                 return;
             }
         }
     }
 
+    // حفظ جميع بيانات الأدوية الحالية في ملف نصي باسم data.txt
     public void saveData() {
+        // استخدام try-with-resources لضمان إغلاق الملف تلقائياً
         try (PrintWriter out = new PrintWriter(new FileWriter("data.txt"))) {
             for (int i = 0; i < count; i++) {
-                out.println(inventory[i]);
+                out.println(inventory[i]); // يحفظ تمثيل النص لكل دواء في سطر جديد
             }
+            System.out.println("تم حفظ البيانات بنجاح.");
         } catch (IOException e) {
-            System.out.println("خطأ في الحفظ.");
+            System.out.println("خطأ في عملية الحفظ.");
         }
     }
 }
